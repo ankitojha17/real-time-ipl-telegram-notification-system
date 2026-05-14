@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual Environment
+venv/
+env/
+
+# Environment
+.env
+
+# Django
+media/
+staticfiles/
+
+# Logs
+*.log
+logs.log
+
+# VS Code
+.vscode/
+
+# IDE
+.idea/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# OS files
+.DS_Store
+Thumbs.db
