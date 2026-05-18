@@ -44,7 +44,7 @@ This system fetches live IPL match data from Cricbuzz Rapid API, detects match e
 # Project Structure
 
 ```text
-ipl_whatsapp_notification_system/
+Real-Time IPL Telegram Notification System/
 │
 ├── apps/
 │   ├── matches/
