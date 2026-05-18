@@ -10,7 +10,7 @@ env/
 
 # Environment
 .env
-
+.env.docker
 # Django
 media/
 staticfiles/
