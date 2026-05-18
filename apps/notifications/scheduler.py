@@ -34,7 +34,7 @@ def start_scheduler():
     scheduler.add_job(
         run_notification_engine,
         "interval",
-        seconds=15,
+        seconds=30,
         id="ipl_notification_engine",
         max_instances=1,
         coalesce=True,
