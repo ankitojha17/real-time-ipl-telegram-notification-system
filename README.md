@@ -1,39 +1,43 @@
 # IPL Telegram Notification System
 
-A production-style real-time IPL notification system built using Django, Django REST Framework, PostgreSQL, APScheduler, and Telegram Bot API.
+A production-style real-time IPL notification system built using Django, Django REST Framework, PostgreSQL, APScheduler, Docker, and Telegram Bot API.
 
-This system fetches live IPL match data from Cricbuzz Rapid API, detects match events like wickets, sixes, over completions, and match results, then automatically sends real-time Telegram notifications based on user preferences.
+This system fetches live IPL match data from Cricbuzz Rapid API, detects match events such as wickets, sixes, over completions, and match results, then automatically sends real-time Telegram notifications based on user preferences.
 
 ---
 
 # Features
 
-- Real-time IPL live match syncing
-- Wicket alerts
-- Six alerts
-- Over completion alerts
-- Match result notifications
-- User-based notification preferences
-- Duplicate notification prevention
-- Notification logging system
-- APScheduler background jobs
-- JWT Authentication
-- Environment variable support
-- Production-style service-layer architecture
-- PostgreSQL database integration
+* Real-time IPL live match syncing
+* Wicket alerts
+* Six alerts
+* Over completion alerts
+* Match result notifications
+* User-based notification preferences
+* Duplicate notification prevention
+* Notification logging system
+* APScheduler background jobs
+* JWT Authentication
+* Environment variable support
+* Dockerized multi-container setup
+* Production-style service-layer architecture
+* PostgreSQL database integration
+* Multi-environment configuration support
 
 ---
 
 # Tech Stack
 
-- Python
-- Django
-- Django REST Framework
-- PostgreSQL
-- APScheduler
-- Telegram Bot API
-- Rapid API (Cricbuzz)
-- JWT Authentication
+* Python
+* Django
+* Django REST Framework
+* PostgreSQL
+* APScheduler
+* Docker
+* Docker Compose
+* Telegram Bot API
+* Rapid API (Cricbuzz)
+* JWT Authentication
 
 ---
 
@@ -43,21 +47,26 @@ This system fetches live IPL match data from Cricbuzz Rapid API, detects match e
 ipl_whatsapp_notification_system/
 │
 ├── apps/
-│   ├── users/
 │   ├── matches/
-│   └── notifications/
+│   ├── notifications/
+│   └── users/
 │
 ├── core/
 ├── utils/
-├── manage.py
+│
+├── Dockerfile
+├── docker-compose.yml
 ├── requirements.txt
+├── manage.py
 ├── README.md
-└── .env
+├── .env
+├── .env.docker
+└── .gitignore
 ```
 
 ---
 
-# Architecture Flow
+# System Architecture
 
 ```text
 User Preferences
@@ -68,7 +77,7 @@ Event Detection Engine
         ↓
 Notification Service
         ↓
-Telegram API
+Telegram Bot API
         ↓
 Notification Logs
 ```
@@ -79,46 +88,28 @@ Notification Logs
 
 ## User
 
-Stores user authentication details.
+Stores authentication details.
 
 ## UserPreference
 
-Stores notification preferences like:
+Stores notification preferences:
 
-- wicket alerts
-- six alerts
-- result alerts
-- over update preferences
+* wicket alerts
+* six alerts
+* over updates
+* result alerts
 
 ## Match
 
-Stores live IPL match data.
+Stores IPL match information.
 
 ## MatchState
 
-Tracks previous scores and events to prevent duplicate notifications.
+Tracks previous match state to prevent duplicate notifications.
 
 ## NotificationLog
 
-Stores notification history and delivery status.
-
----
-
-# Scheduler Flow
-
-APScheduler runs automatically every 15 seconds.
-
-```text
-runserver
-    ↓
-Scheduler Starts
-    ↓
-Fetch Live Matches
-    ↓
-Process Match Events
-    ↓
-Send Notifications
-```
+Stores notification delivery history.
 
 ---
 
@@ -126,18 +117,36 @@ Send Notifications
 
 The system automatically detects:
 
-- Wicket events
-- Six events
-- Over changes
-- Match completion
+* Wicket events
+* Six events
+* Over changes
+* Match completion
+
+---
+
+# Scheduler Flow
+
+APScheduler automatically runs background tasks at fixed intervals.
+
+```text
+Scheduler
+    ↓
+Fetch Live Matches
+    ↓
+Sync Match Data
+    ↓
+Detect Events
+    ↓
+Send Telegram Notifications
+```
 
 ---
 
 # Telegram Integration
 
-Notifications are delivered directly to Telegram using Telegram Bot API.
+Notifications are delivered directly using Telegram Bot API.
 
-Example Notification:
+## Example Notification
 
 ```text
 🏏 WICKET ALERT
@@ -154,6 +163,60 @@ Over: 10.2
 
 ---
 
+# Docker Support
+
+The entire project is fully Dockerized using Docker Compose.
+
+## Containers
+
+* Django Application Container
+* PostgreSQL Database Container
+
+## Docker Architecture
+
+```text
+Docker Compose
+│
+├── Django Container
+│     ├── DRF APIs
+│     ├── Scheduler
+│     └── Notification Engine
+│
+└── PostgreSQL Container
+```
+
+---
+
+# Environment Configuration
+
+The project supports multiple environments.
+
+## Local Environment
+
+`.env`
+
+```env
+DB_NAME=ipl_notification_system_db
+DB_USER=postgres
+DB_PASSWORD=
+DB_HOST=127.0.0.1
+DB_PORT=5432
+```
+
+## Docker Environment
+
+`.env.docker`
+
+```env
+DB_NAME=ipl_notification_system_db
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_HOST=db
+DB_PORT=5432
+```
+
+---
+
 # Installation
 
 ## Clone Repository
@@ -164,13 +227,13 @@ git clone https://github.com/ankitojha17/ipl-whatsapp-notification-system.git
 
 ---
 
+# Local Setup
+
 ## Create Virtual Environment
 
 ```bash
 python -m venv venv
 ```
-
----
 
 ## Activate Virtual Environment
 
@@ -180,47 +243,50 @@ python -m venv venv
 venv\Scripts\activate
 ```
 
----
-
 ## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-# Environment Variables
-
-Create `.env` file in root directory:
-
-```env
-DB_NAME=ipl_notification_system_db
-DB_USER=postgres
-DB_PASSWORD=
-DB_HOST=127.0.0.1
-DB_PORT=5432
-
-RAPID_API_KEY=your_rapid_api_key
-
-TELEGRAM_BOT_TOKEN=your_telegram_bot_token
-TELEGRAM_CHAT_ID=your_chat_id
-```
-
----
-
-# Run Migrations
+## Run Migrations
 
 ```bash
 python manage.py migrate
 ```
 
----
-
-# Run Server
+## Run Server
 
 ```bash
 python manage.py runserver
+```
+
+---
+
+# Docker Setup
+
+## Build Containers
+
+```bash
+docker compose build
+```
+
+## Start Containers
+
+```bash
+docker compose up
+```
+
+## Run Migrations Inside Docker
+
+```bash
+docker compose exec web python manage.py migrate
+```
+
+## Create Superuser
+
+```bash
+docker compose exec web python manage.py createsuperuser
 ```
 
 ---
@@ -247,24 +313,26 @@ Telegram Bot API
 
 # Production-Style Features
 
-- Service-layer architecture
-- Clean separation of concerns
-- Logging support
-- Exception handling
-- Background scheduler
-- Notification history tracking
-- Duplicate prevention logic
-- Environment-based configuration
+* Service-layer architecture
+* Clean separation of concerns
+* Background scheduler
+* Exception handling
+* Logging support
+* Duplicate prevention logic
+* Environment-based configuration
+* Notification history tracking
+* Dockerized deployment support
 
 ---
 
 # Future Improvements
 
-- Docker support
-- Celery + Redis integration
-- WebSocket live updates
-- WhatsApp Cloud API integration
-- Admin analytics dashboard
+* Celery + Redis integration
+* WebSocket live updates
+* WhatsApp Cloud API integration
+* Kubernetes deployment
+* CI/CD pipeline
+* Admin analytics dashboard
 
 ---
 
