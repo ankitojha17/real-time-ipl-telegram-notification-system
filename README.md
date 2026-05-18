@@ -1,4 +1,4 @@
-# IPL Telegram Notification System
+# Real-Time IPL Telegram Notification System
 
 A production-style real-time IPL notification system built using Django, Django REST Framework, PostgreSQL, APScheduler, Docker, and Telegram Bot API.
 
@@ -222,7 +222,7 @@ DB_PORT=5432
 ## Clone Repository
 
 ```bash
-git clone https://github.com/ankitojha17/ipl-whatsapp-notification-system.git
+git clone https://github.com/ankitojha17/real-time-ipl-telegram-notification-system.git
 ```
 
 ---
