@@ -10,12 +10,15 @@ from datetime import timedelta
 
 BASE_DIR=Path(__file__).resolve().parent.parent
 
-load_dotenv(dotenv_path=str(BASE_DIR/".env"),override=True)
+load_dotenv()
 
 
-SECRET_KEY="django-insecure-local-dev-key"
+SECRET_KEY=os.getenv(
+    "SECRET_KEY",
+    "django-insecure-local-dev-key"
+)
 
-DEBUG=True
+DEBUG=os.getenv("DEBUG","False")=="True"
 
 ALLOWED_HOSTS=["*"]
 
@@ -36,8 +39,6 @@ INSTALLED_APPS=[
     "apps.matches",
 ]
 
-
-# MIDDLEWARE
 
 MIDDLEWARE=[
     "django.middleware.security.SecurityMiddleware",
@@ -72,7 +73,6 @@ TEMPLATES=[
 WSGI_APPLICATION="core.wsgi.application"
 
 
-
 DATABASES={
     "default":{
         "ENGINE":"django.db.backends.postgresql",
@@ -80,10 +80,14 @@ DATABASES={
         "USER":os.getenv("DB_USER","postgres"),
         "PASSWORD":os.getenv("DB_PASSWORD"),
         "HOST":os.getenv("DB_HOST"),
-        "PORT":os.getenv("DB_PORT")
+        "PORT":os.getenv("DB_PORT"),
     }
 }
 
+if "neon.tech" in os.getenv("DB_HOST",""):
+    DATABASES["default"]["OPTIONS"]={
+        "sslmode":"require",
+    }
 
 
 AUTH_PASSWORD_VALIDATORS=[
@@ -92,7 +96,6 @@ AUTH_PASSWORD_VALIDATORS=[
     {"NAME":"django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME":"django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
-
 
 
 LANGUAGE_CODE="en-us"
@@ -105,8 +108,11 @@ USE_TZ=True
 
 
 STATIC_URL="static/"
+STATIC_ROOT=BASE_DIR/"staticfiles"
+
 MEDIA_URL="/media/"
 MEDIA_ROOT=BASE_DIR/"media"
+
 
 DEFAULT_AUTO_FIELD="django.db.models.BigAutoField"
 
@@ -138,4 +144,5 @@ SIMPLE_JWT={
 
 
 TELEGRAM_BOT_TOKEN=os.getenv("TELEGRAM_BOT_TOKEN")
+
 TELEGRAM_CHAT_ID=os.getenv("TELEGRAM_CHAT_ID")
