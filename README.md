@@ -6,6 +6,12 @@ This system fetches live IPL match data from Cricbuzz Rapid API, detects match e
 
 ---
 
+## Live Deployment
+
+https://real-time-ipl-telegram-notification.onrender.com
+
+---
+
 # Features
 
 * Real-time IPL live match syncing
@@ -32,6 +38,9 @@ This system fetches live IPL match data from Cricbuzz Rapid API, detects match e
 * Django
 * Django REST Framework
 * PostgreSQL
+- Gunicorn
+- Render
+- NeonDB
 * APScheduler
 * Docker
 * Docker Compose
