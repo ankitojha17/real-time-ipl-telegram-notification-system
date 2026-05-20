@@ -1,10 +1,12 @@
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from core.views import home
 
 
-urlpatterns=[
-    path("admin/",admin.site.urls),
-    path( "api/v1/users/", include("apps.users.urls")),
-    path("api/v1/matches/",include("apps.matches.urls")),
-    path("api/v1/notifications/",include("apps.notifications.urls")),
+urlpatterns = [
+    path("", home),
+    path("admin/", admin.site.urls),
+    path("api/v1/users/", include("apps.users.urls")),
+    path("api/v1/matches/", include("apps.matches.urls")),
+    path("api/v1/notifications/", include("apps.notifications.urls")),
 ]
